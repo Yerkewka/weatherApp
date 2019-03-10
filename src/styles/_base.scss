@@ -1,6 +1,10 @@
 $smoke: whitesmoke;
 $font-family: 'Open sans', Helvetica, Arial, sans-serif;
 
+html {
+  font-size: 62.25%;
+}
+
 body {
   height: 100%;
   background-color: $smoke;

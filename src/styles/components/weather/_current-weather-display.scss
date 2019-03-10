@@ -1,0 +1,21 @@
+.current-weather-display {
+  background-color: #eceff1;
+  padding: 10px;
+  text-align: center;
+  width: 100%;
+  font-size: 1.6rem;
+  position: relative;
+}
+.weather-current {
+  font-size: 5rem;
+}
+.weather-description > div {
+  display: inline-block;
+}
+.refresh {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  cursor: pointer;
+  color: green;
+}

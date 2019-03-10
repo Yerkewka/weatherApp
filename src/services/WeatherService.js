@@ -1,10 +1,10 @@
 import axios from 'axios';
 
-const OPEN_WEATHER_BASE_URL = "http://api.openweathermap.org/data/2.5";
-const OPEN_WEATHER_API_KEY = process.env.OPEN_WEATHER_API_KEY;
-const OPEN_WEATHER_IMG_URL = "http://openweathermap.org/img/w";
+const OPEN_WEATHER_BASE_URL = 'http://api.openweathermap.org/data/2.5';
+const OPEN_WEATHER_API_KEY = process.env.REACT_APP_OPEN_WEATHER_API_KEY;
+const OPEN_WEATHER_IMG_URL = 'http://openweathermap.org/img/w';
 
-const getWeather = (url) => {
+const getWeather = url => {
   return new Promise((resolve, reject) => {
     axios
       .get(url)
@@ -24,20 +24,20 @@ const getWeather = (url) => {
               longitude: lon
             },
             temperature: {
-              current: temp,
-              minimum: temp_min,
-              maximum: temp_max
+              current: parseInt(temp),
+              minimum: parseInt(temp_min),
+              maximum: parseInt(temp_max)
             }
-          })
+          });
         } else {
-          reject("Данные о погоде не найдены...");
+          reject('Данные о погоде не найдены...');
         }
       })
-      .catch(err => reject(err.message))
+      .catch(err => reject(err.message));
   });
-}
+};
 
-const getDailyWeather = (url) => {
+const getDailyWeather = url => {
   return new Promise((resolve, reject) => {
     axios
       .get(url)
@@ -47,7 +47,7 @@ const getDailyWeather = (url) => {
             name: response.data.city.name,
             latitude: response.data.coord.lat,
             longitude: response.data.coord.lon
-          }
+          };
 
           const dailyForecasts = response.data.list.map(fc => {
             return {
@@ -59,19 +59,19 @@ const getDailyWeather = (url) => {
                 minimum: fc.main.temp_min,
                 maximum: fc.main.temp_max
               }
-            }
+            };
           });
 
           resolve(dailyForecasts);
         } else {
-          reject("Данные о погоде не найдены...")
+          reject('Данные о погоде не найдены...');
         }
       })
-      .catch(err => reject(err.message))
+      .catch(err => reject(err.message));
   });
-}
+};
 
-const getHourlyWeather = (url) => {
+const getHourlyWeather = url => {
   return new Promise((resolve, reject) => {
     axios
       .get(url)
@@ -81,7 +81,7 @@ const getHourlyWeather = (url) => {
             name: response.data.city.name,
             latitude: response.data.coord.lat,
             longitude: response.data.coord.lon
-          }
+          };
 
           const hourlyForecast = response.data.list.map(fc => {
             return {
@@ -97,36 +97,32 @@ const getHourlyWeather = (url) => {
 
           resolve(hourlyForecast);
         } else {
-          reject("Данные о погоде не найдены...")
+          reject('Данные о погоде не найдены...');
         }
       })
-      .catch(err => reject(err.message))
+      .catch(err => reject(err.message));
   });
-}
+};
 
 class WeatherService {
+  getCurrentWeatherByPosition(city) {
+    if (!city) throw Error('Название города обязательна');
 
-  getCurrentWeatherByPosition (city) {
-    if (!city)
-      throw Error("Название города обязательна");
-    
-    const url = `${OPEN_WEATHER_BASE_URL}/weather?appid=${OPEN_WEATHER_API_KEY}&q=${city}$units=metric`;
+    const url = `${OPEN_WEATHER_BASE_URL}/weather?appid=${OPEN_WEATHER_API_KEY}&q=${city}&units=metric`;
     return getWeather(url);
   }
 
-  getDailyWeatherByPosition (city) {
-    if (!city)
-      throw Error("Название города обязательна");
-      const url = `${OPEN_WEATHER_BASE_URL}/forecast/daily?appid=${OPEN_WEATHER_API_KEY}&q=${city}$units=metric&cnt=7`;
-      return getDailyWeather(url);
+  getDailyWeatherByPosition(city) {
+    if (!city) throw Error('Название города обязательна');
+    const url = `${OPEN_WEATHER_BASE_URL}/forecast/daily?appid=${OPEN_WEATHER_API_KEY}&q=${city}$units=metric&cnt=7`;
+    return getDailyWeather(url);
   }
 
-  getHourlyWeatherByPosition (city) {
-    if (!city)
-      throw Error("Название города обязательна");
+  getHourlyWeatherByPosition(city) {
+    if (!city) throw Error('Название города обязательна');
 
-      const url = `${OPEN_WEATHER_BASE_URL}/forecast?appid=${OPEN_WEATHER_API_KEY}&q=${city}$units=metric&cnt=12`;
-      return getHourlyWeather(url);
+    const url = `${OPEN_WEATHER_BASE_URL}/forecast?appid=${OPEN_WEATHER_API_KEY}&q=${city}&units=metric&cnt=12`;
+    return getHourlyWeather(url);
   }
 }
 
